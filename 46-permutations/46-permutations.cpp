@@ -1,34 +1,24 @@
 class Solution {
 public:
-    
-    void permutations(vector<int> &nums, vector<vector<int>>& ans, int freq[] ,vector<int> &ds){
-        // base case 
-        // agar ds vector ka size nums kai size kai equal ho gya to ek permutation ton mil gyi push karke return
-        if(ds.size() == nums.size()){
-            ans.push_back(ds);
+    void permutations(int index , vector<int> &nums, vector<vector<int>> &ans){
+        // base case is if index has become wequal to the size of the nums vector
+        if(nums.size() == index){
+            ans.push_back(nums);
             return;
         }
-    
-        for(int i =0;i<nums.size();i++){
-            if(!freq[i]){
-                ds.push_back(nums[i]);
-                freq[i] = 1;
-                permutations(nums,ans,freq,ds);
-                ds.pop_back();
-                freq[i] = 0;
-            }
+        // traverse from index to n-1
+        for(int i =index;i<nums.size();i++){
+            // once the swaps are done we make recursion call for the next states
+            swap(nums[index] , nums[i]);
+            permutations(index +1, nums, ans);
+            // once we come back from recursion we re-swap it
+            // backtracking
+            swap(nums[index], nums[i]);
         }
-        
     }
     vector<vector<int>> permute(vector<int>& nums) {
-        
         vector<vector<int>> ans;
-        vector<int> ds;
-        int freq[nums.size()];
-        for(int i =0;i<nums.size();i++){
-            freq[i] = 0;
-        }
-        permutations(nums, ans, freq, ds);
+        permutations(0, nums, ans);
         return ans;
     }
 };
