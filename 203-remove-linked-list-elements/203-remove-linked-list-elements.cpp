@@ -21,10 +21,10 @@ public:
         ListNode * prev = NULL;
         
         while(curr !=NULL){
-            if(curr ->val == val){
+            if(curr->val == val){
                 prev ->next = curr ->next;
             }
-            else{
+            else if(curr->val != val){
                 prev = curr;
             }
       
