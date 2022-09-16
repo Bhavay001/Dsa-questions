@@ -16,20 +16,22 @@ public:
         }
         ListNode* slow = head;
         ListNode * fast = head;
-        int count = 1;
-        while(fast!=NULL && fast->next !=NULL){
+        
+        while(fast!=NULL && fast->next!=NULL){
             slow = slow->next;
-            count++;
             fast = fast ->next->next;
         }
-       ListNode * curr = head;
-        int count1 = 1;
-        while(count1<count-1){
+        //now slow will be pointing to the node to be deleted in both the odd and even length case
+        
+        ListNode * curr = head;
+        //we move curr a node before slow as slow has to be deleted
+        
+        while(curr->next != slow){
             curr = curr->next;
-            count1++;
         }
-        curr->next = curr->next->next;
-       
+        // removing link from slow by pointing curr->next to next of slow
+        curr->next = slow->next;
         return head;
     }
+    
 };
