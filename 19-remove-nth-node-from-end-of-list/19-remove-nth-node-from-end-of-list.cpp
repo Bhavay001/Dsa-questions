@@ -11,28 +11,25 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        if(head == NULL || head->next == NULL){
-            return NULL;
-        }
+        ListNode * fast = head;
+        ListNode * slow = head;
         
-        ListNode * curr = head;
-        int count =0;
-        while(curr!=NULL){
-            curr = curr->next;
-            count ++;
+        // fisst we move fast pointer n-1 time forward in the ll
+        for(int i =0;i<n;i++){
+            fast = fast ->next;
         }
-        int d = count - n;
-        if(d==0){
+        // ye jab hoga jab size aur n equal hongai to 1st node remove karna hoga to head ka next return kardengai
+        if(fast ==NULL){
             return head->next;
         }
-        int count1 = 1;
-        curr = head;
-        while(count1<d){
-            curr = curr->next;
-            count1++;
+        // now we move out fast pointer and slow pointer forward till fast ->next is not nnull matlab 1 iteration kam
+        while(fast->next !=NULL){
+            slow = slow ->next;
+            fast = fast ->next;
         }
-        curr ->next = curr->next->next;
+        
+        // ab slow jo point karrha hoga wo 1 position kam hoga to 1 position kai aage waale kai aage se pointer hta dengai
+        slow->next = slow ->next->next;
         return head;
-    
     }
 };
