@@ -9,28 +9,52 @@
  * };
  */
 class Solution {
-public:
-    vector<int> ans;
-    bool isPalindrome(ListNode* head) {
-        
-        // brute force we just put all elements in a vector reverse the vector then we compare elemetns of vector to the `          ele in linked list if they are equal we move forward else we return false
-        // if we have traversed the full linked list then we return true;
-        ListNode * curr = head;
-        while(curr!=NULL){
-            ans.push_back(curr->val);
-            curr = curr ->next;
+    public:
+    ListNode* reverseList(ListNode* head) {
+        if(head == NULL){
+            return NULL;
         }
-        reverse(ans.begin(),ans.end());
-        curr = head;
-        int i =0;
-        while(curr !=NULL){
-            if(ans[i] == curr->val){
-                i++;
-                curr = curr->next;
-            }
-            else{
+        if(head->next==NULL){
+            return head;
+        }
+        ListNode * prev = NULL;
+        ListNode * curr = head;
+        ListNode * next = head->next;
+        while(next !=NULL){
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            next = curr->next; 
+        }
+        curr->next = prev;
+        return curr;
+    }
+    
+    bool isPalindrome(ListNode* head) {
+        if(head == NULL || head->next == NULL){
+            return true;
+        }
+        ListNode * slow = head;
+        ListNode * fast = head;
+        // because in even length linked list we need to find the left middle taaki baad mai next waale se connect karne                mai assani ho means if 6 is the length middle mai 3rd
+        while(fast->next!=NULL && fast->next->next!=NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        // connecting right half of the linked list to the slows next hence connecting the full linked list
+        slow ->next = reverseList(slow->next);
+        
+        // ab slow ko uske next par point kardengai aur start mai ek aur pointer rakh dengai agar donoo ki value equal hui           to aage badha jayengai aur jabtak slow null kai equal ni aa jaata we move foward
+        
+        slow = slow ->next;
+        ListNode *curr = head;
+        
+        while(slow !=NULL){
+            if(slow->val != curr ->val){
                 return false;
             }
+            slow = slow->next;
+            curr = curr ->next;
         }
         return true;
     }
