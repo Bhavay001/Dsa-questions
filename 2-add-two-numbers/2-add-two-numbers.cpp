@@ -22,48 +22,35 @@ public:
         ListNode * dummy = new ListNode();
         ListNode * temp = dummy;
         int carry = 0;
-        // jab dono nodes mai value ho
-        while(curr1 !=NULL && curr2!=NULL){
-            // add kardo
-            int sum = carry + curr1->val + curr2->val;
-            int digit = sum%10;
-            carry = sum/10;
-            ListNode * node = new ListNode(digit);
-            temp ->next = node;
-            temp = temp->next;
-            curr1 = curr1->next;
-            curr2 = curr2->next;
-        }
-        // jabtak curr1 null na ho jaaye add karte jao
-        while(curr1!=NULL){
-            int sum = curr1->val+ carry;
-            int digit = sum%10;
-            carry = sum/10;
-            ListNode * node = new ListNode(digit);
-            temp ->next = node;
-            temp = temp->next;
-            curr1 = curr1->next;
-        }
-        // jabtak curr2 null na ho jaaye add karte jao
-        while(curr2!=NULL){
-            int sum = curr2->val+ carry;
-            int digit = sum%10;
-            carry = sum/10;
-            ListNode * node = new ListNode(digit);
-            temp ->next = node;
-            temp = temp->next;
-            curr2 = curr2->next;
-        }
+        //making generic code
         
-        // carry bhi to null bachna chahie aakhri mai warna jitna caary hai utnai unit ki node add kardengai
-        while(carry !=0){
-            int sum = carry;
+        while(curr1 !=NULL || curr2!=NULL || carry !=0){
+      
+            // NULL add hone waala case bach gya
+            int val1 = 0;
+            if(curr1 !=NULL){
+                val1 = curr1->val;
+            }
+            int val2 = 0;
+            if(curr2 !=NULL){
+                val2 = curr2->val;
+            }
+            int sum = carry + val1 + val2;
             int digit = sum%10;
             carry = sum/10;
             ListNode * node = new ListNode(digit);
             temp ->next = node;
             temp = temp->next;
+            // ab next mai bhi jabhi ho agar not null
+            if(curr1!=NULL){
+                curr1 = curr1->next;
+            }
+            if(curr2!=NULL){
+                curr2 = curr2->next;
+            }
+            
         }
+
         return dummy ->next;
     }
 };
