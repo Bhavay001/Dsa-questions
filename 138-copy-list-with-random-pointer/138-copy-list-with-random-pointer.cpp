@@ -17,36 +17,41 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        
         if(head == NULL){
             return NULL;
         }
- 
-        unordered_map<Node*,Node*> mp;
         Node * curr = head;
-        
-        // we create all the new nodes and do mapping of every node with a new node
+        Node * currnext;
+        // step 1-join newnodes in bwtween of the given linked list
         while(curr!=NULL){
-            // ek nya node bna with val of curr
-            Node * CloneNode = new Node(curr->val);
-            // ab CloneNode aur curr waale ko map kardengai
-            mp[curr] = CloneNode;
-            curr = curr->next;
+            Node * clonenode = new Node(curr->val);
+            currnext = curr->next;
+            curr->next = clonenode;
+            clonenode->next = currnext;
+            curr = currnext;
         }
+        //step  2- assign random pointers of cloned list
         curr = head;
-        // cloonin gnext and random pointer now
         while(curr!=NULL){
-            // node point kar rha hai cloned linked list ka curr kai duplicate nodes par
-            Node * node = mp[curr];
-            // ab nedxt pointer copy karne kai liye
-            node->next = mp[curr->next];
-            // random pointr copy karne kai liye 
-            node ->random = mp[curr->random];
-            curr = curr->next;
+            if(curr->random!=NULL){
+                curr->next->random = curr->random->next;
+            }
+           
+            curr = curr->next->next;
         }
-        Node * newhead = mp[head];
-        return newhead;
-        
+        // step 3- remove next pointers from origional -> clone and clone -> origional
+        Node * origionallist = head;
+        Node * clonedlist = head->next;
+        Node * finalhead = head->next;
+        while(origionallist!=NULL && clonedlist!=NULL){
+            origionallist->next = clonedlist->next;
+            origionallist = origionallist->next;
+            if(origionallist!=NULL){
+                clonedlist->next = origionallist->next;
+            }
+            clonedlist = clonedlist->next;
+        }
+        return finalhead;
         
     }
 };
