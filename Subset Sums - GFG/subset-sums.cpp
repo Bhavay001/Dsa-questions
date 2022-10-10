@@ -7,28 +7,24 @@ class Solution
 {
 public:
     
-    void solve(int index,vector<int>&arr, int N,int sum, vector<int>&ans, vector<int> &finalans){
+    void solve(int index,vector<int>&arr, int N,int sum, vector<int> &finalans){
         if(index == N){
             finalans.push_back(sum);
-            sum = 0;
             return;
         }
-        ans.push_back(arr[index]);
-        sum += arr[index];
-        solve(index+1,arr,N,sum ,ans, finalans);
+        // include
+        solve(index+1,arr,N,sum +arr[index] ,finalans);
         
-        ans.pop_back();
-        sum -= arr[index];
-        solve(index+1,arr,N,sum ,ans, finalans);
+        //exclude
+        solve(index+1,arr,N,sum , finalans);
     }
 
     vector<int> subsetSums(vector<int> arr, int N)
     {
         // Write Your Code here
         vector<int> finalans;
-        vector<int> ans;
         int index = 0;
-        solve(index, arr,N, 0,ans, finalans);
+        solve(index, arr,N, 0, finalans);
         return finalans;
 
     }
