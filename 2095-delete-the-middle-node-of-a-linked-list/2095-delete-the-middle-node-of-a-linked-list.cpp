@@ -33,5 +33,4 @@ public:
         curr->next = slow->next;
         return head;
     }
-    
 };
