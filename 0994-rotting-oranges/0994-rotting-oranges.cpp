@@ -1,57 +1,54 @@
 class Solution {
-    int bfs(vector<vector<int>>& grid, queue<pair<pair<int,int>,int>> q,vector<int> dx, vector<int> dy){
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
         int n = grid.size();
-        int  m = grid[0].size();
-        int timemax = 0;
-        while(!q.empty()){
-            int row = q.front().first.first;
-            int col = q.front().first.second;
-            int time = q.front().second;
-            timemax = max(timemax,time);
-            q.pop();
-    
-            for(int i =0;i<4;i++){
-                int newrow = row + dx[i];
-                int newcol = col + dy[i];
-                if(newrow>=0 && newrow<n && newcol>=0 && newcol<m && grid[newrow][newcol]==1){
-                    grid[newrow][newcol] = 3;
-                    q.push({{newrow,newcol},time+1});
+        int m = grid[0].size();
+        
+        // vector of visited nbna diya jismai sab 1 hain 
+        queue<pair<pair<int,int>,int>> q;
+        vector<vector<int>> visited(n, vector<int>(m,0));
+        
+        vector<int> dx = {-1,1,0,0};
+        vector<int> dy = {0,0,-1,1};
+        
+        // ab saare elements in grid jo 2 hain yaani rotten  use ham queue mai push kra dengai with time 0
+        for(int i =0;i<n;i++){
+            for(int j =0;j<m;j++){
+                if(grid[i][j]== 2){
+                    q.push({{i,j},0});
+                    visited[i][j] = 2; 
                 }
             }
             
         }
-        return timemax;
-    }
-public:
-    int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int  m = grid[0].size();
-        // vector<int> visited(n,vector<int>(m,0));
-        vector<int> dx = {1,-1,0,0};
-        vector<int> dy = {0,0, 1,-1};
-        
-        // {{row,col},time}
-        queue<pair<pair<int,int>,int>> q;
-        // vector<vector<int>> visited(n,vector<int>(m,0));
-        for(int i = 0;i<n;i++){
-            for(int j =0 ;j<m;j++){
-                if(grid[i][j] == 2){
-                    // visited[i][j] = 1;
-                    q.push({{i,j},0});
-                    grid[i][j] = 3;
+        // ab jabtak q empty nhi hoti ham adjacent visit karte jayengai time badhta jayega 
+        // jo maximum time aayega wohi hamara answer hai as we are doing bfs
+        int maxtime = 0;
+        while(!q.empty()){
+            int row = q.front().first.first;
+            int col = q.front().first.second;
+            int time = q.front().second;
+            maxtime = max(maxtime,time);
+            q.pop();
+            
+            for(int i = 0;i<4;i++){
+                int nrow = row + dx[i];
+                int ncol = col + dy[i];
+                if(nrow>=0 && nrow< n && ncol >= 0 && ncol < m && grid[nrow][ncol] ==1 && visited[nrow][ncol] ==0){
+                    q.push({{nrow,ncol},time+1});
+                    visited[nrow][ncol] = 2;
                 }
             }
         }
-        int time =0;
-        time = bfs(grid,q,dx,dy);
-        
-        for(int i = 0;i<n;i++){
-            for(int j =0 ;j<m;j++){
-                if(grid[i][j] == 1){
-                    return -1; 
+        // last mai check karliya agar aise elements hain to grid mai 1 hain aur visited mai rotten 2 nhi hue to
+        // alll oranges are not rottened return -1
+        for(int i =0;i<n;i++){
+            for(int j =0;j<m;j++){
+                if(grid[i][j]== 1 && visited[i][j] == 0){
+                    return -1;
                 }
             }
         }
-        return time;
+        return maxtime;
     }
 };
