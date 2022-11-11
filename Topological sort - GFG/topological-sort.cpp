@@ -6,34 +6,41 @@ using namespace std;
 class Solution
 {
 	public:
-	
-	void dfs(int node, vector<int> adj[],vector<int> &visited,stack<int> &st){
-	    visited[node] = 1;
-	    for(auto x:adj[node]){
-	        if(!visited[x]){
-	            dfs(x,adj,visited,st);
-	        }
-	    }
-	    st.push(node);
-	}
+
 	//Function to return list containing vertices in Topological order. 
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
 	    // code here
-	    vector<int> visited(V,0);
-	    stack<int> st;
-	    for(int i =0;i<V;i++){
-	        if(!visited[i]){
-	            dfs(i,adj,visited,st);
+	    // topo sort using kahns algorithm by bfs
+
+	    vector<int> indegree(V,0);
+	    for(int i=0;i<V;i++){
+	        for(auto x:adj[i]){
+	            indegree[x]++;
 	        }
 	    }
-	    
 	    vector<int> ans;
-	    while(!st.empty()){
-	        ans.push_back(st.top());
-	        st.pop();
+	    queue<int> q;
+	    for(int i =0;i<V;i++){
+	        if(indegree[i]==0){
+	            q.push(i);
+	            ans.push_back(i);
+
+	        }
 	    }
-	    return ans;
+	    while(!q.empty()){
+	        int front = q.front();
+	        q.pop();
+	        for(auto x:adj[front]){
+	            indegree[x]--;
+	            if(indegree[x]==0){
+	                q.push(x);
+	                ans.push_back(x);
+	     
+	            }
+	        }
+	    }
+	        return ans;
 	}
 };
 
