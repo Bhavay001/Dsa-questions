@@ -24,18 +24,16 @@ class Solution
 	    for(int i =0;i<V;i++){
 	        if(indegree[i]==0){
 	            q.push(i);
-	            ans.push_back(i);
-
 	        }
 	    }
 	    while(!q.empty()){
 	        int front = q.front();
 	        q.pop();
+	        ans.push_back(front);
 	        for(auto x:adj[front]){
 	            indegree[x]--;
 	            if(indegree[x]==0){
 	                q.push(x);
-	                ans.push_back(x);
 	     
 	            }
 	        }
