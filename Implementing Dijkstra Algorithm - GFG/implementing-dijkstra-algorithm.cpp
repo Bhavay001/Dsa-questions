@@ -12,22 +12,28 @@ class Solution
     {
         // Code here
         vector<int> distance(V,INT_MAX);
-        priority_queue<pair<int,int> , vector<pair<int,int>> , greater<pair<int,int>>>pq;
-        
+        set<pair<int,int>> st;
+
         distance[S] = 0;
-        pq.push({0,S});
+        st.insert({0,S});
         
-        while(!pq.empty()){
-            int wt = pq.top().first;
-            int node = pq.top().second;
-            pq.pop();
+        while(!st.empty()){
+            auto it = *(st.begin());
+            int wt = it.first;
+            int node = it.second;
+            st.erase(it);
             
             for(auto x:adj[node]){
                 int newwt = x[1];
                 int adjnode = x[0];
-                if(distance[adjnode] > distance[node] + newwt){
-                    distance[adjnode] = distance[node] + newwt;
-                    pq.push({newwt,adjnode});
+                if(distance[adjnode] > wt + newwt){
+                    if(distance[adjnode]!=INT_MAX){
+                        // this is the minimal diffrerence here we remove the pair from set if we get
+                        //a new one with lesser distance
+                        st.erase({distance[adjnode],adjnode});
+                    }
+                    distance[adjnode] = wt + newwt;
+                    st.insert({distance[adjnode],adjnode});
                 }
             }
         }
