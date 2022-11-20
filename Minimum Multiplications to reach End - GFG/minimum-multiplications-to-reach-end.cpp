@@ -23,7 +23,7 @@ class Solution {
             int node = q.front().second;
     
             q.pop();
-            
+            // distance vector just works as a visited vector here as distance will always be the smallest
             for(int i =0;i<arr.size();i++){
                 int num = node * arr[i] % 100000;
                 if(steps + 1 < distance[num]){
