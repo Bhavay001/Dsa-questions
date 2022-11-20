@@ -28,9 +28,9 @@ public:
             
             q.pop();
             // when steps are greater than k we do not want to calculate further
-            // if(steps > k){
-            //     continue;
-            // }
+            if(steps > k){
+                continue;
+            }
             for(auto x:adj[node]){
                 int wt = x.second;
                 int adjnode = x.first;
