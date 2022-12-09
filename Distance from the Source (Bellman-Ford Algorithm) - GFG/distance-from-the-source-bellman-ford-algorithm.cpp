@@ -16,6 +16,8 @@ class Solution {
         // Code here
         vector<int> distance(V,1e8);
         distance[S] = 0;
+        // we traversed all the edges n-1 times and the that iteration we wil get the shortest path to each node 
+        // rest finding the shorter path consition is same as dijaktras
         for(int i =0;i<V-1;i++){
             for(auto x:edges){
                 int u = x[0];
@@ -26,7 +28,7 @@ class Solution {
                 }
             }
         }
-        
+        // ntgh iteration to check the negative cycle
         for(auto x:edges){
                 if(distance[x[0]]!= 1e8 && distance[x[0]] + x[2] <distance[x[1]]){
                         return {-1};
