@@ -1,34 +1,60 @@
-class Solution {
-private:
-    void dfs(int node, vector<int> &visited,vector<int> adj[]){
-        visited[node] = 1;
-        for(auto x:adj[node]){
-            if(!visited[x]){
-                dfs(x,visited,adj);
-            }
-        }  
+class DisjointSet{
+    vector<int> parent,rank;
+    public:
+    DisjointSet(int n){
+        parent.resize(n);
+        rank.resize(n,0);
+        for(int i=0;i<n;i++){
+            parent[i] = i;
+        }
     }
+    
+    int findPar(int node){
+        if(parent[node] == node){
+            return node;
+        }
+        return parent[node] = findPar(parent[node]);
+    }
+    
+    void UnionByRank(int u,int v){
+        int ulp_u = findPar(u);
+        int ulp_v = findPar(v);
+        
+        if(ulp_u==ulp_v){
+            return;
+        }
+        if(rank[ulp_u] < rank[ulp_v]){
+            parent[ulp_u] = ulp_v;
+        }
+        else if(rank[ulp_v] < rank[ulp_u]){
+            parent[ulp_v] = ulp_u;
+        }
+        else{
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+        
+    }
+};
+
+
+class Solution {
 public:
     int findCircleNum(vector<vector<int>>& isConnected) {
-        
-        // converted adjacencty matrix to list
         int n = isConnected.size();
-        vector<int> adj[n];
-        vector<int> visited(n,0);
+        DisjointSet ds(n);
         for(int i =0;i<n;i++){
-            for(int j = 0;j<n;j++){
-                if(i!=j && isConnected[i][j]==1){
-                    adj[i].push_back(j);
+            for(int j=0;j<n;j++){
+                if(isConnected[i][j]==1){
+                    ds.UnionByRank(i,j);
                 }
             }
         }
-        
-        // now simply i checked for number of components and it will be my answer
+        // now we check each node if we get a node whose parent is himselt it means we can add
         int count = 0;
         for(int i =0;i<n;i++){
-            if(!visited[i]){
+            if(ds.findPar(i)==i){
                 count++;
-                dfs(i,visited,adj);
             }
         }
         return count;
