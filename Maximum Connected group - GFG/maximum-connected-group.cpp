@@ -102,9 +102,9 @@ class Solution {
                     if(isValid(row,col,n) && grid[row][col]==1 ){
                             int rowno = i*n + j;
                             int newrowno = row * n + col;
-                            // if(ds.findPar(newrowno) != ds.findPar(rowno)){
+                            if(ds.findPar(newrowno) != ds.findPar(rowno)){
                                 ds.UnionBySize(rowno,newrowno);
-                            // }
+                            }
                     }
                 }
 
