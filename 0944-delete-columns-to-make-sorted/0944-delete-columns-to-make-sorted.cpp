@@ -22,7 +22,6 @@ public:
                     mp[j] = strs[i][j];
                 }
                 else{
-                    cout<<strs[i][j];
                     s.insert(j);
                 }
             }
