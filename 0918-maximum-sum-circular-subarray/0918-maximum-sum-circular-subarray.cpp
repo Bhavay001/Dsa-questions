@@ -27,11 +27,7 @@ public:
                 minsum = 0;
             }
         }
-        int max1 = maxi;
-        int max2 = totalsum - mini;
-        if(totalsum == mini){
-            return maxi;
-        }
-        return max(max1,max2);
+        
+        return totalsum==mini?maxi:max(maxi,totalsum-mini);
     }
 };
