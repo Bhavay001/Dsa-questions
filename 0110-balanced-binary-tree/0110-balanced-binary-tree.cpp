@@ -16,9 +16,21 @@ public:
         if(root == NULL){
             return 0;
         }
+        // we check the subtreee is balanced or not while calculating the height only so that           the complexity comed down to 0(n)
         int lh = height(root->left);
+    
+        if(lh == -1){
+            return -1;
+        }
         int rh = height(root->right);
+
+        if(rh == -1){
+            return -1;
+        }
         
+        if(abs(lh-rh)>1){
+            return -1;
+        }
         return 1 + max(lh,rh);
     }
     
@@ -26,18 +38,10 @@ public:
         if(root==NULL){
             return true;
         }
-        int lh = height(root->left);
-        int rh = height (root->right);
-        // cout<<lh<< " and " <<rh<<endl;
-        if(abs(lh-rh)>1){
-            return false;
+        if(height(root) ==-1){
+           return false;
         }
-        bool left = isBalanced(root->left);
-        bool right = isBalanced(root->right);
-        
-        if(!left || !right){
-            return false;
-        }
+     
         return true;
     }
 };
