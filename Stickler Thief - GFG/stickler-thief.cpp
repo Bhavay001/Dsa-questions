@@ -13,16 +13,20 @@ class Solution
     int FindMaxSum(int arr[], int n)
     {
         // Your code here
-        vector<int> dp(n,-1);
-        dp[0] = arr[0];
-        dp[1] =  max(arr[0],arr[1]);
+        if(n==1){
+            return arr[0];
+        }
+        int prev2 = arr[0];
+        int prev =  max(arr[0],arr[1]);
         
         for(int i =2;i<n;i++){
-            int pick = dp[i-2] + arr[i];
-            int notpick = dp[i-1];
-             dp[i] = max(pick,notpick);
+            int pick = prev2 + arr[i];
+            int notpick = prev;
+            int curr = max(pick,notpick);
+            prev2 = prev;
+            prev = curr;
         }
-        return dp[n-1];
+        return prev;
     }
 
 };
