@@ -38,8 +38,34 @@ public:
         // code here 
         int n = arr.size();
         //creating a dp array of dp[ind +1][target +1]
-        vector<vector<int>> dp (n, vector<int>(sum+1,-1));
-        return solve(n-1,sum,arr,dp);
+        vector<bool> prev(sum+1,0);
+        vector<bool> curr(sum+1,0);
+        // all 0th index of the rows are marked as true
+        prev[0] = curr[0] = 1;
+        
+        // base case from the index
+        if(arr[0]  <= sum){
+            prev[arr[0]] = true;
+        }
+        
+        // nested loops with first one for index and second one for target
+        for(int ind = 1;ind<n;ind++){
+            for(int target =1;target<=sum;target++){
+                bool nottake = prev[target];
+                // take
+                bool take = false;
+                if(arr[ind]<=target){
+                    take = prev[target - arr[ind]];
+                }
+                //if any of the one among take or not take returns true, we can return true
+                curr[target] = nottake || take;
+            
+            }
+            prev = curr;
+        }
+        
+        
+        return prev[sum];
     }
 };
 
