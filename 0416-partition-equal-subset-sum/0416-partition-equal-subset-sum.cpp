@@ -2,7 +2,7 @@ class Solution {
 public:
 
     bool canPartition(vector<int>& nums) {
-        //tabulation bottom up
+        //space optimization
         int n = nums.size();
         int sum = 0;
         for(int i =0;i<n;i++){
@@ -14,31 +14,32 @@ public:
         sum = sum/2;
         // dp[size][target+1]
         // dp[ind+1][target+1]
-        vector<vector<bool>> dp(n,vector<bool>(sum+1,0));
+        vector<bool> prev(sum+1,0);
+        vector<bool> curr(sum+1,0);
         
         // if target == 0
-        for(int i =0;i<n;i++){
-            dp[i][0] = true;
-        }
+        prev[0] = curr[0] = true;
+    
         // if index = 0
         if(nums[0]  <= sum){
-            dp[0][nums[0]] = true;
+            prev[nums[0]] = true;
         }
         
         for(int ind = 1;ind<n;ind++){
             for(int target = 1;target<=sum;target++){
 
-                bool nottake = dp[ind -1][target];
+                bool nottake = prev[target];
                 bool take = false;
 
                 if(target>=nums[ind]){
-                    take = dp[ind-1][target-nums[ind]];
+                    take = prev[target-nums[ind]];
                 }
                 
-                dp[ind][target] = take || nottake; 
+                curr[target] = take || nottake; 
             }
+            prev = curr;
         }
-        return dp[n-1][sum];
+        return prev[sum];
     }
 };
 
