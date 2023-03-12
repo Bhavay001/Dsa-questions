@@ -1,40 +1,44 @@
 class Solution {
 public:
-    bool solve(int ind, int target, vector<int> & nums,vector<vector<int>> &dp){
-        // base case if target = 0
-        if(target == 0){
-            return true;
-        }
-       // when index reaches 0 we check if the 0th index in array is equal to the target left return true
-        if(ind == 0){
-            return nums[0] == target;
-        }
-        if(dp[ind][target]!=-1){
-            return dp[ind][target];
-        }
-        bool nottake = solve(ind -1,target,nums,dp);
-        bool take = false;
-        
-        if(target>=nums[ind]){
-            take = solve(ind-1,target-nums[ind],nums,dp);
-        }
-        return dp[ind][target] = take || nottake;
-    }
+
     bool canPartition(vector<int>& nums) {
-        //memoization
+        //tabulation bottom up
         int n = nums.size();
-        int target = 0;
+        int sum = 0;
         for(int i =0;i<n;i++){
-            target+=nums[i];
+            sum+=nums[i];
         }
-        if(target%2!=0){
+        if(sum%2!=0){
             return false;
         }
-        target = target/2;
+        sum = sum/2;
         // dp[size][target+1]
         // dp[ind+1][target+1]
-        vector<vector<int>> dp(n,vector<int>(target+1,-1));
-        return solve(n-1,target,nums,dp);
+        vector<vector<bool>> dp(n,vector<bool>(sum+1,0));
+        
+        // if target == 0
+        for(int i =0;i<n;i++){
+            dp[i][0] = true;
+        }
+        // if index = 0
+        if(nums[0]  <= sum){
+            dp[0][nums[0]] = true;
+        }
+        
+        for(int ind = 1;ind<n;ind++){
+            for(int target = 1;target<=sum;target++){
+
+                bool nottake = dp[ind -1][target];
+                bool take = false;
+
+                if(target>=nums[ind]){
+                    take = dp[ind-1][target-nums[ind]];
+                }
+                
+                dp[ind][target] = take || nottake; 
+            }
+        }
+        return dp[n-1][sum];
     }
 };
 
