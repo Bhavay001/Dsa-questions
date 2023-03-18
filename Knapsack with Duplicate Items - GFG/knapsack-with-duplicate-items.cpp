@@ -30,8 +30,24 @@ public:
     int knapSack(int N, int W, int val[], int wt[])
     { 
         // code here 
+        // tabulation
         vector<vector<int>> dp(N,vector<int> (W+1,-1));
-        return solve(N-1,W,val,wt,dp);
+        
+        for(int i =0;i<=W;i++){
+            dp[0][i] = (i/wt[0])*val[0];
+        }
+        for(int ind = 1;ind<N;ind++){
+            for(int w=0;w<=W;w++){
+                
+                int nottake = dp[ind-1][w];
+                int take = INT_MIN;
+                if(wt[ind]<=w){
+                   take = val[ind] + dp[ind][w-wt[ind]]; 
+                }
+                dp[ind][w] = max(take,nottake);
+            }
+        }
+        return dp[N-1][W];
     }
 };
 
