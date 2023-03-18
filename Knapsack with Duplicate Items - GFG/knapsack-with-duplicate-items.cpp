@@ -31,7 +31,7 @@ public:
     { 
         // code here 
         // tabulation
-        vector<vector<int>> dp(N,vector<int> (W+1,-1));
+        vector<vector<int>> dp(N,vector<int> (W+1,0));
         
         for(int i =0;i<=W;i++){
             dp[0][i] = (i/wt[0])*val[0];
