@@ -32,8 +32,28 @@ class Solution{
     //we need to find maximum value. We can include a index multiple times 
     int cutRod(int price[], int n) {
         //code here
-        vector<vector<int>> dp(n,vector<int>(n+1,-1));
-        return solve(n-1,n,price,dp);
+        vector<vector<int>> dp(n,vector<int>(n+1,0));
+        
+        // tabulation
+        // we can go from 0 to the targe
+        for(int i =0;i<=n;i++){
+            dp[0][i] =  price[0]*i;
+        }
+        
+        for(int ind =1 ;ind <n;ind++){
+            for(int target = 0;target<=n;target++){
+                
+                int nottake = dp[ind-1][target];
+                
+                int take = INT_MIN;
+                int rodlength = ind+1;
+                if(target>=rodlength){
+                    take = price[ind] + dp[ind][target - rodlength];
+                }
+                dp[ind][target] = max(take,nottake);  
+            }
+        }
+        return dp[n-1][n];
     }
 };
 
