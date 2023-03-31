@@ -37,8 +37,7 @@ public:
         
         vector<int> finalans;
         for(int i =0;i<nums1.size();i++ ){
-            auto it = mp.find(nums1[i]);
-            finalans.push_back(ans[it->second]);
+            finalans.push_back(ans[mp[nums1[i]]]);
         }
         
         return finalans;
