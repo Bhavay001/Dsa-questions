@@ -1,39 +1,51 @@
 class Solution {
 public:
     bool wordPattern(string pattern, string s) {
-        
+        // there can be 2 things that we need to check
+        //1) a -> dog
+        //  a-> cat this cannot happen
+        //2) a-> dog
+        // b->dog
         vector<string> v;
-        string temp = "";
-        set<string> set;
-        for(int i=0 ;i<s.size();i++){
+        string str = "";
+        for(int i =0;i<s.size();i++){
             if(s[i]== ' '){
-                v.push_back(temp);
-                temp = "";
+                v.push_back(str);
+                str = "";
             }
             else{
-                temp += s[i];
+                str+=s[i];
             }
         }
-        if(temp != ""){
-            v.push_back(temp);
-            temp = "";
+        
+        if(str.size()!=0){
+            v.push_back(str);
+            str = "";
         }
+        
         if(v.size()!=pattern.size()){
             return false;
         }
-        unordered_map<char,string> mp;
+        
+        // now we have all the string words in a vector
+        // we will store the mapping of the character to the word and if the word is already present 
+        map<char,string> mp;
+        set<char> st1;
+        set<string> st2; 
         for(int i =0;i<pattern.size();i++){
-            // agar patten letter nahi hai map mai to daal dengai
-            if(mp.find(pattern[i])==mp.end()){
-                if(set.find(v[i])!=set.end()){
+            if(mp.find(pattern[i])== mp.end()){
+                mp[pattern[i]] = v[i];
+                st1.insert(pattern[i]);
+                st2.insert(v[i]);
+            }
+            else{
+                if(mp[pattern[i]]!=v[i]){
                     return false;
                 }
-                mp[pattern[i]] = v[i];
-                set.insert(v[i]);
             }
-            else if(mp.find(pattern[i])!=mp.end() && mp[pattern[i]] != v[i]){
-                return false;
-            }
+        }
+        if(st1.size()!=st2.size()){
+            return false;
         }
         return true;
     }
