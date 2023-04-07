@@ -1,58 +1,67 @@
 class Solution {
 public:
-    
-    void dfs(int row, int col, vector<vector<int>> &visited, vector<vector<int>> &grid,vector<int> dx,vector<int> dy){
-        visited[row][col] = 1;
-        
-        int n = grid.size();
-        int m = grid[0].size();
-        
+
+    void enclave(int row,int col,int n ,int m,int &ans, vector<vector<int>>& grid, vector<int>&dx, vector<int> &dy){
+        grid[row][col]  =2;
+        ans++;
         for(int i =0;i<4;i++){
-            int nrow = row + dx[i];
-            int ncol = col + dy[i];
-            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && !visited[nrow][ncol] && grid[nrow][ncol] == 1){
-                dfs(nrow,ncol,visited,grid,dx,dy);
+            int newrow = row + dx[i];
+            int newcol = col + dy[i];
+            
+            if(newrow>=0 && newrow < n && newcol >=0 && newcol <m && grid[newrow][newcol] ==1){
+                enclave(newrow,newcol,n,m,ans,grid,dx,dy);
             }
         }
-        
+    }
+    
+    void solve(int row,int col,int n ,int m,vector<vector<int>>& grid, vector<int>&dx, vector<int> &dy){
+        grid[row][col]  =2;
+        for(int i =0;i<4;i++){
+            int newrow = row + dx[i];
+            int newcol = col + dy[i];
+            
+            if(newrow>=0 && newrow < n && newcol >=0 && newcol <m && grid[newrow][newcol] ==1){
+                solve(newrow,newcol,n,m,grid,dx,dy);
+            }
+        }
     }
     
     int numEnclaves(vector<vector<int>>& grid) {
-        // similar to surrounded regions we will check for boundry 1s and make a dfs call to the neg=ighbouring 1s
-        // we will all negighbouring 1s with the boundry 1s as visited the at last check for 1s which are not visited
-        
+        // boundry traversal on the grid if they are 1
         int n = grid.size();
         int m = grid[0].size();
+        int ans = 0;
         
-        vector<vector<int>> visited(n,vector<int>(m,0));
-        vector<int> dx = {-1,1,0,0};
-        vector<int> dy = {0,0,-1,1};
+        vector<int> dx = {0,0,-1,1};
+        vector<int> dy = {-1,1,0,0};
         
-        for(int j =0;j<m;j++){
-            if(!visited[0][j] && grid[0][j]==1){
-                dfs(0,j,visited,grid,dx,dy);
+        for(int j=0;j<m;j++){
+            if(grid[0][j]==1){
+                solve(0,j,n,m,grid,dx,dy);
             }
-            if(!visited[n-1][j] && grid[n-1][j]==1){
-               dfs(n-1,j,visited,grid,dx,dy); 
+            if(grid[n-1][j]==1){
+                solve(n-1,j,n,m,grid,dx,dy);
+            }
+        }
+        
+        for(int i=0;i<n;i++){
+            if(grid[i][0]==1){
+                solve(i,0,n,m,grid,dx,dy);
+            }
+            if(grid[i][m-1]==1){
+                solve(i,m-1,n,m,grid,dx,dy);
             }
         }
         
         for(int i =0;i<n;i++){
-            if(!visited[i][0] && grid[i][0]==1){
-                dfs(i,0,visited,grid,dx,dy);
-            }
-            if(!visited[i][m-1] && grid[i][m-1]==1){
-               dfs(i,m-1,visited,grid,dx,dy); 
-            }
-        }
-        int count = 0;
-        for(int i =0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(!visited[i][j] && grid[i][j]==1){
-                    count++;
+            for(int j =0;j<m;j++){
+                if(grid[i][j] == 1){
+                    enclave(i,j,n,m,ans,grid,dx,dy);
                 }
             }
         }
-        return count;
+        return ans;
     }
+    
+    
 };
