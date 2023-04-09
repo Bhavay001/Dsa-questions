@@ -1,7 +1,7 @@
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
-        
+        // greedy approach
         int reachable = 0;
         for(int i=0;i<nums.size();i++){
             
