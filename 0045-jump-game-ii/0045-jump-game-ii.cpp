@@ -1,25 +1,22 @@
 class Solution {
 public:
-    
-    // memoization solution
-    int solve(int ind,int n, vector<int>&nums,vector<int> &dp){
-        // if we have reached the end we do not have to move further
-        if(ind == n-1){
-            return 0;
-        }
-        if(dp[ind]!=-1){
-            return dp[ind];
-        }
-        int mini = 1e9;
-        for(int j =1;j<=min(n-ind-1,nums[ind]);j++){
-            int step = 1 + solve(ind + j,n,nums,dp);
-            mini = min(mini,step);
-        }
-        return dp[ind] = mini;
-    }
     int jump(vector<int>& nums) {
-        int n = nums.size();
-        vector<int> dp(n+1,-1);
-        return solve(0,n,nums,dp);
+        int ans = 0;
+        // we will maintain a range of left to right with will initially be at index 0
+        int left = 0;
+        int right = 0;
+        
+        
+        while(right<nums.size()-1){
+            int farthest = 0;
+            // we will traverse the range and find the farthest point
+            for(int i = left;i<=right;i++){
+                farthest = max(farthest,i+ nums[i]);
+            }
+            ans++;
+            left = right +1;
+            right = farthest;
+        }
+        return ans;
     }
 };
