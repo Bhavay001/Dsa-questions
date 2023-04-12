@@ -26,25 +26,15 @@ public:
             } 
         }
         
-
-        stack<string> st1;
+        string ans = "";
         while(!st.empty()){
-            st1.push(st.top());
+            ans = "/" + st.top() + ans;
             st.pop();
         }
-        
-        string ans = "";
-        if(st1.empty()){
-           ans += '/'; 
+        if(ans.size()==0){
+            ans = "/";
         }
-        else{
-            while(!st1.empty()){
-                ans += '/';
-                ans += st1.top();
-                st1.pop();
-
-            }
-        }
+     
         return ans;
     }
 };
