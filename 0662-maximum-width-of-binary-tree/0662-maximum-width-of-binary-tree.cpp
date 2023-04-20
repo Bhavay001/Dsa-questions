@@ -11,44 +11,40 @@
  */
 class Solution {
 public:
-      int widthOfBinaryTree(TreeNode* root) {
-        if(root==NULL){
+    int widthOfBinaryTree(TreeNode* root) {
+        
+        if(root == NULL){
             return 0;
         }
-        
-        queue<pair<TreeNode *,long long int >> q;
-        long long width = 0;
-        
+        long long ans = 0;
+        queue<pair<TreeNode *,int>> q;
         q.push({root,0});
-      
-        while(!q.empty()){
-            int size = q.size();
-            int minind = q.front().second;
-            long long first,last;
-            for(int i =0;i<size;i++){
-                TreeNode * node = q.front().first;
-                // this is done so that instead of storing elements index as 1 2 3 4 5
-                // here now it has index starting from begining for each lvl
-                long long index = q.front().second - minind;
-                q.pop();
-                if(i == 0){
-                    first = index;
-                }
-                if(i==size-1){
-                   last = index;
-                }
-
-                if(node->left!=NULL){
-                    q.push({node->left,2*index+1});
-                }
-
-                if(node->right!=NULL){
-                    q.push({node->right,2*index+2});
-                }
-                width = max(width,last-first +1);
-            }
-        }
-        return width;
         
+        while(!q.empty()){
+            int n = q.size();
+            long long first , last;
+            int mmin = q.front().second; // this is the first nodes index in the level
+            for(int i =0;i<n;i++){
+                TreeNode * node = q.front().first;
+                // this is done to avoid overflow
+                long long curr_id = q.front().second - mmin; // curr nodes id by subracting mmin
+                q.pop();
+                
+                if(i ==0){
+                    first = curr_id;
+                }
+                if(i == n-1){
+                    last = curr_id;
+                }
+                if(node ->left){
+                    q.push({node->left, curr_id*2+1});
+                }
+                if(node ->right){
+                    q.push({node->right,curr_id*2+2});
+                }
+            }
+            ans = max(ans,last-first+1);
+        }
+        return ans;
     }
 };
