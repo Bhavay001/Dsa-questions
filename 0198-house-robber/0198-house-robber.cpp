@@ -17,6 +17,6 @@ public:
     int rob(vector<int>& nums) {
         int n = nums.size();
         vector<int> dp(n,-1);
-        return max(solve(n-1,nums,dp),solve(n-2,nums,dp));
+        return solve(n-1,nums,dp);
     }
 };
