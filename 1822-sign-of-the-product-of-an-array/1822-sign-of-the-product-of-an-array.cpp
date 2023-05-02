@@ -1,20 +1,15 @@
 class Solution {
 public:
     int arraySign(vector<int>& nums) {
-        double product = 1;
-        for(int i =0;i<nums.size();i++){
-            product = nums[i] * product;
+        int negCnt=0;
+        for(int i=0; i<nums.size(); i++){
+            if(nums[i]==0)
+                return 0;
+            if(nums[i]<0)
+                negCnt++;    
         }
-        // cout<<product;
-        if(product==0){
-            return 0;
-        }
-        else if(product > 0){
-            return 1;
-        }
-        else if(product<0){
+        if(negCnt%2!=0)
             return -1;
-        }
-        return 0;
+        return 1;           
     }
 };
