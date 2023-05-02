@@ -1,34 +1,44 @@
 class Solution {
 public:
+    vector<vector<string>> finalans;
     
-    bool isPalindrome(string s, int start, int end){
-        while(start<=end){
-            if(s[start++]!=s[end--]){
-                return false;
+    void solve(string s,int startIndex, int currIndex,vector<string> &ans){
+        if(currIndex == s.size()){
+            if(startIndex == s.size()){
+                finalans.push_back(ans);
+            }
+            return;
+        }
+        
+        //check if current string is palindrome or not
+        bool ispal = true;
+        int l = startIndex;
+        int r = currIndex;
+        while(l<r){
+            if(s[l]!=s[r]){
+                ispal = false;
+                break;
+            }
+            else{
+                l++;
+                r--;
             }
         }
-        return true;
-    }
-    void solve(int index, string s, vector<vector<string>>& ans, vector<string> &path){
-        // base case if the index/partioning index has reached euqal to the size of the string
-        if(index == s.length()){
-            ans.push_back(path);
-                return;
-        }
-        // now  starting from the index if it is possible to divide
-        for(int i =index;i<s.length();i++){
-            if(isPalindrome(s,index,i)){
-                path.push_back(s.substr(index,i - index +1));
-                solve(i+1,s,ans,path);
-                path.pop_back();
-            }
-        }
+        // the current string is palindrome we will partition it here after then backtrack
+        if(ispal){
+            ans.push_back(s.substr(startIndex,currIndex - startIndex +1));
+            solve(s,currIndex+1,currIndex +1,ans);
+            ans.pop_back();
+        }  
+        // not partition here contibue to take the string
+        solve(s,startIndex, currIndex + 1,ans);
     }
     vector<vector<string>> partition(string s) {
-        vector<vector<string>> ans;
-        vector<string> path;
-        // 0 is the index
-        solve(0,s,ans, path);
-        return ans;
+        int startIndex = 0;
+        int currIndex = 0;
+        vector<string> ans;
+        // startIndex represents the starting of a string and currIndex will represent the end or curr index of string
+        solve(s,startIndex,currIndex,ans);
+        return finalans;
     }
 };
